@@ -24,17 +24,6 @@ jobs:
       - name: 빌드
         run: ./gradlew clean build -x test
 
-      - name: EC2 배포
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
-          port: ${{ secrets.EC2_PORT }}
-          script: |
-            sudo pkill -f 'tripbaton' || true
-            sleep 3
-
       - name: jar 파일 전송
         uses: appleboy/scp-action@v1
         with:
@@ -53,4 +42,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
+            pkill -f 'tripbaton' || true
+            sleep 3
             nohup java -jar ~/build/libs/*SNAPSHOT.jar > ~/app.log 2>&1 &
+            disown

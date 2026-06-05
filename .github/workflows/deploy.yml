@@ -32,8 +32,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-            pkill -f 'tripbaton' || true
-            sleep 2
+            sudo pkill -f 'tripbaton' || true
+            sleep 3
 
       - name: jar 파일 전송
         uses: appleboy/scp-action@v1

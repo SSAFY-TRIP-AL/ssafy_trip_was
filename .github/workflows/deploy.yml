@@ -42,7 +42,4 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-            pkill -f 'tripbaton' || true
-            sleep 3
-            nohup java -jar ~/build/libs/*SNAPSHOT.jar > ~/app.log 2>&1 &
-            disown
+            sudo systemctl restart tripbaton

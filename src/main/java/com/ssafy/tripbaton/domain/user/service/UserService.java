@@ -74,4 +74,27 @@ public class UserService {
 
         return new LoginResponseDto(accessToken, "로그인이 완료되었습니다.");
     }
+
+    @Transactional
+    public LoginResponseDto reissue(String refreshToken) {
+        // 토큰 유효성 검증
+        if (!jwtUtil.validateToken(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        Long userId = jwtUtil.getUserId(refreshToken);
+
+        // DB에 저장된 refresh token과 비교
+        RefreshToken savedToken = refreshTokenRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
+
+        if (!savedToken.getToken().equals(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        // 새 access token 발급
+        String newAccessToken = jwtUtil.generateAccessToken(userId);
+
+        return new LoginResponseDto(newAccessToken, "토큰이 재발급되었습니다.");
+    }
 }

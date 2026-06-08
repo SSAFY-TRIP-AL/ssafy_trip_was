@@ -31,4 +31,11 @@ public class AuthController {
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(userService.login(dto));
     }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<LoginResponseDto> reissue(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+        return ResponseEntity.ok(userService.reissue(refreshToken));
+    }
 }

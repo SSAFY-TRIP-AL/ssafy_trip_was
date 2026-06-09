@@ -71,7 +71,7 @@ public class UserService {
                 .createdAt(LocalDateTime.now())
                 .build());
 
-        return new LoginResponseDto(accessToken, "로그인이 완료되었습니다.");
+        return new LoginResponseDto(accessToken, user.getName(), "로그인이 완료되었습니다.");
     }
 
     @Transactional
@@ -94,7 +94,10 @@ public class UserService {
         // 새 access token 발급
         String newAccessToken = jwtUtil.generateAccessToken(userId);
 
-        return new LoginResponseDto(newAccessToken, "토큰이 재발급되었습니다.");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
+
+        return new LoginResponseDto(newAccessToken, user.getName(), "토큰이 재발급되었습니다.");
     }
 
     @Transactional

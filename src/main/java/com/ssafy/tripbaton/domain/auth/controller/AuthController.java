@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "auth")
@@ -37,5 +38,12 @@ public class AuthController {
             @RequestHeader("Authorization") String authorizationHeader) {
         String refreshToken = authorizationHeader.replace("Bearer ", "");
         return ResponseEntity.ok(userService.reissue(refreshToken));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        userService.logout(userId);
+        return ResponseEntity.ok(ApiResponse.of("로그아웃이 완료되었습니다."));
     }
 }

@@ -97,4 +97,9 @@ public class UserService {
 
         return new LoginResponseDto(newAccessToken, "토큰이 재발급되었습니다.");
     }
+
+    @Transactional
+    public void logout(Long userId) {
+        refreshTokenRepository.deleteByUserId(userId);
+    }
 }

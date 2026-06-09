@@ -14,6 +14,9 @@ public class SignupRequestDto {
     private String password;
 
     @NotBlank
+    private String passwordConfirm;
+
+    @NotBlank
     private String name;
 
     @NotBlank
@@ -21,7 +24,4 @@ public class SignupRequestDto {
     private String email;
 
     private String phone;
-
-    @NotBlank
-    private String nickname;
 }

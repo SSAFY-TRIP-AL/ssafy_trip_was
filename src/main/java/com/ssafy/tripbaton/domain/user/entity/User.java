@@ -34,9 +34,6 @@ public class User {
     @Column(length = 20)
     private String phone;
 
-    @Column(nullable = false, length = 50)
-    private String nickname;
-
     @Column(length = 500)
     private String profileImage;
 

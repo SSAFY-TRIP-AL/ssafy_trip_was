@@ -11,7 +11,7 @@ public enum ErrorCode {
     MISSING_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(loginId, password, name, email, nickname)가 필요합니다.", "MISSING_FIELDS"),
     DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다.", "DUPLICATE_LOGIN_ID"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다.", "DUPLICATE_EMAIL"),
-    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다.", "DUPLICATE_NICKNAME"),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.", "PASSWORD_MISMATCH"),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 올바르지 않습니다.", "INVALID_CREDENTIALS"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다.", "INVALID_REFRESH_TOKEN"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", "INVALID_TOKEN");

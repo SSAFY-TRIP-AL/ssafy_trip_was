@@ -26,14 +26,14 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequestDto dto) {
+        if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
+            throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
+        }
         if (userRepository.existsByLoginId(dto.getLoginId())) {
             throw new CustomException(ErrorCode.DUPLICATE_LOGIN_ID);
         }
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-        }
-        if (userRepository.existsByNickname(dto.getNickname())) {
-            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
         User user = User.builder()
@@ -42,7 +42,6 @@ public class UserService {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
-                .nickname(dto.getNickname())
                 .build();
 
         userRepository.save(user);

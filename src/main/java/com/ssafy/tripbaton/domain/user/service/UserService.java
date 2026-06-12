@@ -2,6 +2,7 @@ package com.ssafy.tripbaton.domain.user.service;
 
 import com.ssafy.tripbaton.domain.auth.entity.RefreshToken;
 import com.ssafy.tripbaton.domain.auth.repository.RefreshTokenRepository;
+import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.SignupRequestDto;
@@ -113,6 +114,22 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
         return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordRequestDto dto) {
+        if (!dto.getNewPassword().equals(dto.getNewPasswordConfirm())) {
+            throw new CustomException(ErrorCode.NEW_PASSWORD_MISMATCH);
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+        if (user.isSocialLoginUser()) {
+            throw new CustomException(ErrorCode.SOCIAL_LOGIN_USER);
+        }
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_CURRENT_PASSWORD);
+        }
+        user.changePassword(passwordEncoder.encode(dto.getNewPassword()));
     }
 
     @Transactional

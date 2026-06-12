@@ -66,6 +66,11 @@ public class User {
         return this.provider != null;
     }
 
+    public void withdraw() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

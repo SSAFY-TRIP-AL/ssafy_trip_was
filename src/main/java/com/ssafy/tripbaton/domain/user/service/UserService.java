@@ -117,6 +117,14 @@ public class UserService {
     }
 
     @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+        user.withdraw();
+        refreshTokenRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
     public void changePassword(Long userId, ChangePasswordRequestDto dto) {
         if (!dto.getNewPassword().equals(dto.getNewPasswordConfirm())) {
             throw new CustomException(ErrorCode.NEW_PASSWORD_MISMATCH);

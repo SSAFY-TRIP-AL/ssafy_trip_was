@@ -5,6 +5,7 @@ import com.ssafy.tripbaton.domain.auth.repository.RefreshTokenRepository;
 import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.SignupRequestDto;
+import com.ssafy.tripbaton.domain.user.dto.UserResponseDto;
 import com.ssafy.tripbaton.domain.user.entity.User;
 import com.ssafy.tripbaton.domain.user.repository.UserRepository;
 import com.ssafy.tripbaton.global.exception.CustomException;
@@ -104,5 +105,12 @@ public class UserService {
     @Transactional
     public void logout(Long userId) {
         refreshTokenRepository.deleteByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto getMe(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+        return new UserResponseDto(user);
     }
 }

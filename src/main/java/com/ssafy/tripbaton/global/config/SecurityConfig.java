@@ -38,7 +38,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/s3/**", "/api/categories", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/relays").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/relays", "/api/relays/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),

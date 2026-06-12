@@ -4,10 +4,13 @@ import com.ssafy.tripbaton.domain.category.entity.Category;
 import com.ssafy.tripbaton.domain.category.repository.CategoryRepository;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayStepDto;
 import com.ssafy.tripbaton.domain.relay.entity.Relay;
 import com.ssafy.tripbaton.domain.relay.repository.RelayRepository;
+import com.ssafy.tripbaton.domain.relay.repository.RelayStepRepository;
 import com.ssafy.tripbaton.domain.user.entity.User;
 import com.ssafy.tripbaton.domain.user.repository.UserRepository;
 import com.ssafy.tripbaton.global.exception.CustomException;
@@ -23,6 +26,7 @@ import java.util.List;
 public class RelayService {
 
     private final RelayRepository relayRepository;
+    private final RelayStepRepository relayStepRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
@@ -67,5 +71,18 @@ public class RelayService {
                 .toList();
 
         return new RelayListResponseDto(items);
+    }
+
+    @Transactional(readOnly = true)
+    public RelayDetailResponseDto getRelay(Long relayId) {
+        Relay relay = relayRepository.findById(relayId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
+
+        List<RelayStepDto> steps = relayStepRepository.findByRelayIdOrderByStepOrderAsc(relayId)
+                .stream()
+                .map(RelayStepDto::new)
+                .toList();
+
+        return new RelayDetailResponseDto(relay, steps);
     }
 }

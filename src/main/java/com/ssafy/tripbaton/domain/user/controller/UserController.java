@@ -40,4 +40,11 @@ public class UserController {
         userService.changePassword(userId, dto);
         return ResponseEntity.ok(ApiResponse.of("비밀번호가 변경되었습니다."));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<ApiResponse> withdraw(Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        userService.withdraw(userId);
+        return ResponseEntity.ok(ApiResponse.of("회원 탈퇴가 완료되었습니다."));
+    }
 }

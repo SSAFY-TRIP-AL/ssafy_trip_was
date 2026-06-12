@@ -58,6 +58,14 @@ public class User {
         if (profileImage != null) this.profileImage = profileImage;
     }
 
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public boolean isSocialLoginUser() {
+        return this.provider != null;
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

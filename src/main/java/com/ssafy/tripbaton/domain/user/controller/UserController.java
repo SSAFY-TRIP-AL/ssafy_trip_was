@@ -1,5 +1,6 @@
 package com.ssafy.tripbaton.domain.user.controller;
 
+import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.UserResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.UserUpdateRequestDto;
 import com.ssafy.tripbaton.domain.user.service.UserService;
@@ -30,5 +31,13 @@ public class UserController {
         Long userId = (Long) authentication.getPrincipal();
         userService.updateMe(userId, dto);
         return ResponseEntity.ok(ApiResponse.of("정보가 수정되었습니다."));
+    }
+
+    @PatchMapping("/me/password")
+    public ResponseEntity<ApiResponse> changePassword(Authentication authentication,
+                                                      @RequestBody ChangePasswordRequestDto dto) {
+        Long userId = (Long) authentication.getPrincipal();
+        userService.changePassword(userId, dto);
+        return ResponseEntity.ok(ApiResponse.of("비밀번호가 변경되었습니다."));
     }
 }

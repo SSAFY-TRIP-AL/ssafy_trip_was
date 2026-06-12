@@ -15,7 +15,10 @@ public enum ErrorCode {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.", "PASSWORD_MISMATCH"),
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 올바르지 않습니다.", "INVALID_CREDENTIALS"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다.", "INVALID_REFRESH_TOKEN"),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", "INVALID_TOKEN");
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", "INVALID_TOKEN"),
+    SOCIAL_LOGIN_USER(HttpStatus.FORBIDDEN, "소셜 로그인 사용자는 비밀번호를 변경할 수 없습니다.", "SOCIAL_LOGIN_USER"),
+    INVALID_CURRENT_PASSWORD(HttpStatus.CONFLICT, "현재 비밀번호가 올바르지 않습니다.", "INVALID_CURRENT_PASSWORD"),
+    NEW_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "새 비밀번호가 일치하지 않습니다.", "PASSWORD_MISMATCH");
 
     private final HttpStatus status;
     private final String message;

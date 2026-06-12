@@ -4,6 +4,8 @@ import com.ssafy.tripbaton.domain.category.entity.Category;
 import com.ssafy.tripbaton.domain.category.repository.CategoryRepository;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.entity.Relay;
 import com.ssafy.tripbaton.domain.relay.repository.RelayRepository;
 import com.ssafy.tripbaton.domain.user.entity.User;
@@ -13,6 +15,8 @@ import com.ssafy.tripbaton.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +54,18 @@ public class RelayService {
 
         Relay saved = relayRepository.save(relay);
         return new RelayCreateResponseDto("릴레이가 등록되었습니다.", saved.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public RelayListResponseDto getRelays(Long categoryId, String sort, String keyword) {
+        List<Relay> relays = "popular".equals(sort)
+                ? relayRepository.findAllByFilterOrderByPopular(categoryId, keyword)
+                : relayRepository.findAllByFilterOrderByLatest(categoryId, keyword);
+
+        List<RelayListItemDto> items = relays.stream()
+                .map(RelayListItemDto::new)
+                .toList();
+
+        return new RelayListResponseDto(items);
     }
 }

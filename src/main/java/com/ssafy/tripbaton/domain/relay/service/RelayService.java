@@ -9,6 +9,7 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepDto;
 import com.ssafy.tripbaton.domain.relay.entity.Relay;
+import com.ssafy.tripbaton.domain.relay.entity.RelayStep;
 import com.ssafy.tripbaton.domain.relay.repository.RelayRepository;
 import com.ssafy.tripbaton.domain.relay.repository.RelayStepRepository;
 import com.ssafy.tripbaton.domain.user.entity.User;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,9 +56,26 @@ public class RelayService {
                 .longitude(dto.getLongitude())
                 .photoUrl(dto.getPhotoUrl())
                 .content(dto.getContent())
+                .participantCount(1)
+                .lastParticipatedAt(LocalDateTime.now())
                 .build();
 
         Relay saved = relayRepository.save(relay);
+
+        RelayStep firstStep = RelayStep.builder()
+                .relay(saved)
+                .user(user)
+                .stepOrder(1)
+                .locationName(dto.getLocationName())
+                .address(dto.getAddress())
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
+                .photoUrl(dto.getPhotoUrl())
+                .content(dto.getContent())
+                .build();
+
+        relayStepRepository.save(firstStep);
+
         return new RelayCreateResponseDto("릴레이가 등록되었습니다.", saved.getId());
     }
 

@@ -6,6 +6,7 @@ import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.SignupRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.UserResponseDto;
+import com.ssafy.tripbaton.domain.user.dto.UserUpdateRequestDto;
 import com.ssafy.tripbaton.domain.user.entity.User;
 import com.ssafy.tripbaton.domain.user.repository.UserRepository;
 import com.ssafy.tripbaton.global.exception.CustomException;
@@ -112,5 +113,15 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
         return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public void updateMe(Long userId, UserUpdateRequestDto dto) {
+        if (dto.getName() == null && dto.getProfileImage() == null) {
+            throw new CustomException(ErrorCode.NO_UPDATE_FIELDS);
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+        user.update(dto.getName(), dto.getProfileImage());
     }
 }

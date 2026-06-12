@@ -53,6 +53,11 @@ public class User {
 
     private LocalDateTime deletedAt;
 
+    public void update(String name, String profileImage) {
+        if (name != null) this.name = name;
+        if (profileImage != null) this.profileImage = profileImage;
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

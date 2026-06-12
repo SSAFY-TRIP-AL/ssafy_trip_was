@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     MISSING_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(loginId, password, name, email, nickname)가 필요합니다.", "MISSING_FIELDS"),
+    NO_UPDATE_FIELDS(HttpStatus.BAD_REQUEST, "수정할 항목이 없습니다.", "MISSING_FIELDS"),
     DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다.", "DUPLICATE_LOGIN_ID"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다.", "DUPLICATE_EMAIL"),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.", "PASSWORD_MISMATCH"),

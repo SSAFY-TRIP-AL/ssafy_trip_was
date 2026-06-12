@@ -2,6 +2,7 @@ package com.ssafy.tripbaton.domain.relay.controller;
 
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.service.RelayService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class RelayController {
 
     private final RelayService relayService;
+
+    @GetMapping
+    public ResponseEntity<RelayListResponseDto> getRelays(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false, defaultValue = "latest") String sort,
+            @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(relayService.getRelays(categoryId, sort, keyword));
+    }
 
     @PostMapping
     public ResponseEntity<RelayCreateResponseDto> createRelay(Authentication authentication,

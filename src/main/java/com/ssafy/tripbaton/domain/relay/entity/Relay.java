@@ -50,6 +50,17 @@ public class Relay {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private RelayStatus status = RelayStatus.ACTIVE;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private int participantCount = 0;
+
+    private LocalDateTime lastParticipatedAt;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     boolean existsByUserIdAndRelayId(Long userId, Long relayId);
+
+    java.util.Optional<Bookmark> findByUserIdAndRelayId(Long userId, Long relayId);
 }

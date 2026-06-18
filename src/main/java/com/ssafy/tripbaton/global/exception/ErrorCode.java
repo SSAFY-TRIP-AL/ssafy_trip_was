@@ -23,6 +23,7 @@ public enum ErrorCode {
     RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 릴레이입니다.", "RELAY_NOT_FOUND"),
     RELAY_ARCHIVED(HttpStatus.CONFLICT, "아카이브된 릴레이에는 참여할 수 없습니다.", "RELAY_ARCHIVED"),
     ALREADY_BOOKMARKED(HttpStatus.CONFLICT, "이미 찜한 릴레이입니다.", "ALREADY_BOOKMARKED"),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "찜한 릴레이가 존재하지 않습니다.", "BOOKMARK_NOT_FOUND"),
     MISSING_STEP_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(locationName, latitude, longitude)가 필요합니다.", "MISSING_FIELDS");
 
     private final HttpStatus status;

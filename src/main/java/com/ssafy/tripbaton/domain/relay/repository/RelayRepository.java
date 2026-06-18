@@ -22,4 +22,7 @@ public interface RelayRepository extends JpaRepository<Relay, Long> {
            "ORDER BY r.participantCount DESC, r.createdAt DESC")
     List<Relay> findAllByFilterOrderByPopular(@Param("categoryId") Long categoryId,
                                               @Param("keyword") String keyword);
+
+    @Query("SELECT r FROM Relay r JOIN FETCH r.category WHERE r.user.id = :userId ORDER BY r.createdAt DESC")
+    List<Relay> findAllByUserIdOrderByCreatedAtDesc(@Param("userId") Long userId);
 }

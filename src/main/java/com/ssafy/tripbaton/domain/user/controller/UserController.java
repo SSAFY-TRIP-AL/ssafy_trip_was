@@ -1,5 +1,6 @@
 package com.ssafy.tripbaton.domain.user.controller;
 
+import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.MyRelayListResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.UserResponseDto;
@@ -40,6 +41,12 @@ public class UserController {
         Long userId = (Long) authentication.getPrincipal();
         userService.changePassword(userId, dto);
         return ResponseEntity.ok(ApiResponse.of("비밀번호가 변경되었습니다."));
+    }
+
+    @GetMapping("/me/relays/created")
+    public ResponseEntity<CreatedRelayListResponseDto> getMyCreatedRelays(Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ResponseEntity.ok(userService.getMyCreatedRelays(userId));
     }
 
     @GetMapping("/me/relays")

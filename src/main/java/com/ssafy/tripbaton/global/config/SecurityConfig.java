@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/s3/**", "/api/categories", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/relays", "/api/relays/active", "/api/relays/*", "/api/relays/*/steps", "/api/hall-of-fame").permitAll()
+                        .requestMatchers("/api/map/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),

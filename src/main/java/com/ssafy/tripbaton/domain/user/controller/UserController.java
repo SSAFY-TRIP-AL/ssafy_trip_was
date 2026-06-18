@@ -1,5 +1,7 @@
 package com.ssafy.tripbaton.domain.user.controller;
 
+import com.ssafy.tripbaton.domain.bookmark.dto.BookmarkListResponseDto;
+import com.ssafy.tripbaton.domain.bookmark.service.BookmarkService;
 import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.MyRelayListResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final BookmarkService bookmarkService;
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getMe(Authentication authentication) {
@@ -41,6 +44,12 @@ public class UserController {
         Long userId = (Long) authentication.getPrincipal();
         userService.changePassword(userId, dto);
         return ResponseEntity.ok(ApiResponse.of("비밀번호가 변경되었습니다."));
+    }
+
+    @GetMapping("/me/bookmarks")
+    public ResponseEntity<BookmarkListResponseDto> getMyBookmarks(Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ResponseEntity.ok(bookmarkService.getMyBookmarks(userId));
     }
 
     @GetMapping("/me/relays/created")

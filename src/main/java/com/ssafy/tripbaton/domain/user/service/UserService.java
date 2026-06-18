@@ -2,8 +2,11 @@ package com.ssafy.tripbaton.domain.user.service;
 
 import com.ssafy.tripbaton.domain.auth.entity.RefreshToken;
 import com.ssafy.tripbaton.domain.auth.repository.RefreshTokenRepository;
+import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListItemDto;
+import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.MyRelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.MyRelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.repository.RelayRepository;
 import com.ssafy.tripbaton.domain.relay.repository.RelayStepRepository;
 import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
@@ -31,6 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RelayStepRepository relayStepRepository;
+    private final RelayRepository relayRepository;
 
     @Transactional
     public void signup(SignupRequestDto dto) {
@@ -152,6 +156,15 @@ public class UserService {
                 .map(MyRelayListItemDto::new)
                 .toList();
         return new MyRelayListResponseDto(items);
+    }
+
+    @Transactional(readOnly = true)
+    public CreatedRelayListResponseDto getMyCreatedRelays(Long userId) {
+        List<CreatedRelayListItemDto> items = relayRepository.findAllByUserIdOrderByCreatedAtDesc(userId)
+                .stream()
+                .map(CreatedRelayListItemDto::new)
+                .toList();
+        return new CreatedRelayListResponseDto(items);
     }
 
     @Transactional

@@ -37,4 +37,12 @@ public class BookmarkService {
                 .relay(relay)
                 .build());
     }
+
+    @Transactional
+    public void removeBookmark(Long userId, Long relayId) {
+        Bookmark bookmark = bookmarkRepository.findByUserIdAndRelayId(userId, relayId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
+
+        bookmarkRepository.delete(bookmark);
+    }
 }

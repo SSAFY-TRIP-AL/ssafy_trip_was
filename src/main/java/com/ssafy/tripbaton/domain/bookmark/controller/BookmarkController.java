@@ -24,4 +24,12 @@ public class BookmarkController {
         bookmarkService.addBookmark(userId, relayId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of("찜하기가 완료되었습니다."));
     }
+
+    @DeleteMapping("/{relayId}/bookmarks")
+    public ResponseEntity<ApiResponse> removeBookmark(Authentication authentication,
+                                                      @PathVariable Long relayId) {
+        Long userId = (Long) authentication.getPrincipal();
+        bookmarkService.removeBookmark(userId, relayId);
+        return ResponseEntity.ok(ApiResponse.of("찜하기가 취소되었습니다."));
+    }
 }

@@ -28,4 +28,7 @@ public interface RelayRepository extends JpaRepository<Relay, Long> {
 
     @Query("SELECT r FROM Relay r JOIN FETCH r.category WHERE r.status IN ('ACTIVE', 'STALE') ORDER BY r.lastParticipatedAt DESC")
     List<Relay> findTop5Active(org.springframework.data.domain.Pageable pageable);
+
+    @Query("SELECT r FROM Relay r JOIN FETCH r.category ORDER BY r.participantCount DESC")
+    List<Relay> findTopByParticipantCount(org.springframework.data.domain.Pageable pageable);
 }

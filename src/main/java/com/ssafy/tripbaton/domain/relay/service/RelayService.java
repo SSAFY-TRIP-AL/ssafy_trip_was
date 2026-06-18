@@ -7,8 +7,11 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepDto;
 import com.ssafy.tripbaton.domain.relay.entity.Relay;
+import com.ssafy.tripbaton.domain.relay.entity.RelayStatus;
 import com.ssafy.tripbaton.domain.relay.entity.RelayStep;
 import com.ssafy.tripbaton.domain.relay.repository.RelayRepository;
 import com.ssafy.tripbaton.domain.relay.repository.RelayStepRepository;
@@ -103,5 +106,43 @@ public class RelayService {
                 .toList();
 
         return new RelayDetailResponseDto(relay, steps);
+    }
+
+    @Transactional
+    public RelayStepCreateResponseDto joinRelay(Long userId, Long relayId, RelayStepCreateRequestDto dto) {
+        if (dto.getLocationName() == null || dto.getLatitude() == null || dto.getLongitude() == null) {
+            throw new CustomException(ErrorCode.MISSING_STEP_FIELDS);
+        }
+
+        Relay relay = relayRepository.findById(relayId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
+
+        if (relay.getStatus() == RelayStatus.CLOSED) {
+            throw new CustomException(ErrorCode.RELAY_ARCHIVED);
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+
+        int nextOrder = relayStepRepository.countByRelayId(relayId) + 1;
+
+        RelayStep step = RelayStep.builder()
+                .relay(relay)
+                .user(user)
+                .stepOrder(nextOrder)
+                .locationName(dto.getLocationName())
+                .address(dto.getAddress())
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
+                .photoUrl(dto.getPhotoUrl())
+                .content(dto.getContent())
+                .build();
+
+        RelayStep saved = relayStepRepository.save(step);
+
+        LocalDateTime now = LocalDateTime.now();
+        relay.addStep(now);
+
+        return new RelayStepCreateResponseDto("릴레이에 참여하였습니다.", saved.getId());
     }
 }

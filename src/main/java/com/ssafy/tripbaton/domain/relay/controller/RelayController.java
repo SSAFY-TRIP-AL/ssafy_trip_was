@@ -4,6 +4,8 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.service.RelayService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,14 @@ public class RelayController {
     @GetMapping("/{relayId}")
     public ResponseEntity<RelayDetailResponseDto> getRelay(@PathVariable Long relayId) {
         return ResponseEntity.ok(relayService.getRelay(relayId));
+    }
+
+    @PostMapping("/{relayId}/steps")
+    public ResponseEntity<RelayStepCreateResponseDto> joinRelay(Authentication authentication,
+                                                                @PathVariable Long relayId,
+                                                                @RequestBody RelayStepCreateRequestDto dto) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ResponseEntity.status(HttpStatus.CREATED).body(relayService.joinRelay(userId, relayId, dto));
     }
 
     @PostMapping

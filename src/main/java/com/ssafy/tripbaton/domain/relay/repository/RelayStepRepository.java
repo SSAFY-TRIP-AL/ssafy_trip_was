@@ -18,4 +18,6 @@ public interface RelayStepRepository extends JpaRepository<RelayStep, Long> {
         @org.springframework.data.repository.query.Param("userId") Long userId);
 
     java.util.Optional<RelayStep> findTopByRelayIdOrderByStepOrderAsc(Long relayId);
+
+    java.util.Optional<RelayStep> findTopByRelayIdOrderByStepOrderDesc(Long relayId);
 }

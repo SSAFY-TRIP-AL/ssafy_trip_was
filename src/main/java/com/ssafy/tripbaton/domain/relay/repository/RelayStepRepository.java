@@ -8,4 +8,6 @@ import java.util.List;
 public interface RelayStepRepository extends JpaRepository<RelayStep, Long> {
 
     List<RelayStep> findByRelayIdOrderByStepOrderAsc(Long relayId);
+
+    int countByRelayId(Long relayId);
 }

@@ -20,7 +20,9 @@ public enum ErrorCode {
     INVALID_CURRENT_PASSWORD(HttpStatus.CONFLICT, "현재 비밀번호가 올바르지 않습니다.", "INVALID_CURRENT_PASSWORD"),
     NEW_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "새 비밀번호가 일치하지 않습니다.", "PASSWORD_MISMATCH"),
     MISSING_RELAY_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(title, categoryId, locationName, latitude, longitude)가 필요합니다.", "MISSING_FIELDS"),
-    RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 릴레이입니다.", "RELAY_NOT_FOUND");
+    RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 릴레이입니다.", "RELAY_NOT_FOUND"),
+    RELAY_ARCHIVED(HttpStatus.CONFLICT, "아카이브된 릴레이에는 참여할 수 없습니다.", "RELAY_ARCHIVED"),
+    MISSING_STEP_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(locationName, latitude, longitude)가 필요합니다.", "MISSING_FIELDS");
 
     private final HttpStatus status;
     private final String message;

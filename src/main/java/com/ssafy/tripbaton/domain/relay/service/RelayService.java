@@ -9,6 +9,9 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.HallOfFameEntryDto;
+import com.ssafy.tripbaton.domain.relay.dto.HallOfFameRelayDto;
+import com.ssafy.tripbaton.domain.relay.dto.HallOfFameResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayRouteResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayRouteStepDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
@@ -27,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -110,6 +115,24 @@ public class RelayService {
                 .toList();
 
         return new RelayDetailResponseDto(relay, steps);
+    }
+
+    @Transactional(readOnly = true)
+    public HallOfFameResponseDto getHallOfFame() {
+        LocalDate weekStart = LocalDate.now().with(DayOfWeek.MONDAY);
+
+        List<Relay> topByParticipants = relayRepository.findTopByParticipantCount(
+                org.springframework.data.domain.PageRequest.of(0, 3));
+
+        List<HallOfFameEntryDto> entries = new java.util.ArrayList<>();
+
+        for (int i = 0; i < topByParticipants.size(); i++) {
+            Relay relay = topByParticipants.get(i);
+            entries.add(new HallOfFameEntryDto(i + 1, "MOST_PARTICIPANTS",
+                    new HallOfFameRelayDto(relay, relay.getParticipantCount())));
+        }
+
+        return new HallOfFameResponseDto(weekStart, entries);
     }
 
     @Transactional(readOnly = true)

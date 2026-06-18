@@ -7,6 +7,8 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayRouteResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayRouteStepDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepDto;
@@ -106,6 +108,19 @@ public class RelayService {
                 .toList();
 
         return new RelayDetailResponseDto(relay, steps);
+    }
+
+    @Transactional(readOnly = true)
+    public RelayRouteResponseDto getRelayRoute(Long relayId) {
+        Relay relay = relayRepository.findById(relayId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
+
+        List<RelayRouteStepDto> steps = relayStepRepository.findByRelayIdOrderByStepOrderAsc(relayId)
+                .stream()
+                .map(RelayRouteStepDto::new)
+                .toList();
+
+        return new RelayRouteResponseDto(relay, steps);
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayRouteResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
@@ -22,6 +23,11 @@ import org.springframework.web.bind.annotation.*;
 public class RelayController {
 
     private final RelayService relayService;
+
+    @GetMapping("/active")
+    public ResponseEntity<ActiveRelayListResponseDto> getActiveRelays() {
+        return ResponseEntity.ok(relayService.getActiveRelays());
+    }
 
     @GetMapping
     public ResponseEntity<RelayListResponseDto> getRelays(

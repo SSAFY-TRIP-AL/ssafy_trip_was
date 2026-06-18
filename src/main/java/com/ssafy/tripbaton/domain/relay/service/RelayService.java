@@ -7,6 +7,8 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListItemDto;
+import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayRouteResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayRouteStepDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
@@ -108,6 +110,16 @@ public class RelayService {
                 .toList();
 
         return new RelayDetailResponseDto(relay, steps);
+    }
+
+    @Transactional(readOnly = true)
+    public ActiveRelayListResponseDto getActiveRelays() {
+        List<ActiveRelayListItemDto> items = relayRepository
+                .findTop5Active(org.springframework.data.domain.PageRequest.of(0, 5))
+                .stream()
+                .map(ActiveRelayListItemDto::new)
+                .toList();
+        return new ActiveRelayListResponseDto(items);
     }
 
     @Transactional(readOnly = true)

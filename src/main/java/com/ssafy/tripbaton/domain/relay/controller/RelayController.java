@@ -4,6 +4,7 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayDetailResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.RelayRouteResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateRequestDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.service.RelayService;
@@ -33,6 +34,11 @@ public class RelayController {
     @GetMapping("/{relayId}")
     public ResponseEntity<RelayDetailResponseDto> getRelay(@PathVariable Long relayId) {
         return ResponseEntity.ok(relayService.getRelay(relayId));
+    }
+
+    @GetMapping("/{relayId}/steps")
+    public ResponseEntity<RelayRouteResponseDto> getRelayRoute(@PathVariable Long relayId) {
+        return ResponseEntity.ok(relayService.getRelayRoute(relayId));
     }
 
     @PostMapping("/{relayId}/steps")

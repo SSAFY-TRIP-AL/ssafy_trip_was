@@ -2,6 +2,9 @@ package com.ssafy.tripbaton.domain.user.service;
 
 import com.ssafy.tripbaton.domain.auth.entity.RefreshToken;
 import com.ssafy.tripbaton.domain.auth.repository.RefreshTokenRepository;
+import com.ssafy.tripbaton.domain.relay.dto.MyRelayListItemDto;
+import com.ssafy.tripbaton.domain.relay.dto.MyRelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.repository.RelayStepRepository;
 import com.ssafy.tripbaton.domain.user.dto.ChangePasswordRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginResponseDto;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RelayStepRepository relayStepRepository;
 
     @Transactional
     public void signup(SignupRequestDto dto) {
@@ -138,6 +143,15 @@ public class UserService {
             throw new CustomException(ErrorCode.INVALID_CURRENT_PASSWORD);
         }
         user.changePassword(passwordEncoder.encode(dto.getNewPassword()));
+    }
+
+    @Transactional(readOnly = true)
+    public MyRelayListResponseDto getMyRelays(Long userId) {
+        List<MyRelayListItemDto> items = relayStepRepository.findDistinctRelaysByUserId(userId)
+                .stream()
+                .map(MyRelayListItemDto::new)
+                .toList();
+        return new MyRelayListResponseDto(items);
     }
 
     @Transactional

@@ -16,4 +16,6 @@ public interface RelayStepRepository extends JpaRepository<RelayStep, Long> {
         "WHERE s.user.id = :userId ORDER BY s.relay.lastParticipatedAt DESC")
     java.util.List<com.ssafy.tripbaton.domain.relay.entity.Relay> findDistinctRelaysByUserId(
         @org.springframework.data.repository.query.Param("userId") Long userId);
+
+    java.util.Optional<RelayStep> findTopByRelayIdOrderByStepOrderAsc(Long relayId);
 }

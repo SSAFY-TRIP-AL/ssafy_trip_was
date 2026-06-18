@@ -8,6 +8,7 @@ import com.ssafy.tripbaton.domain.relay.service.RelayService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +34,13 @@ public class RelayController {
         return ResponseEntity.ok(relayService.getRelay(relayId));
     }
 
-    @PostMapping
-    public ResponseEntity<RelayCreateResponseDto> createRelay(Authentication authentication,
-                                                              @RequestBody RelayCreateRequestDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RelayCreateResponseDto> createRelay(
+            Authentication authentication,
+            @ModelAttribute RelayCreateRequestDto dto
+    ) {
         Long userId = (Long) authentication.getPrincipal();
-        return ResponseEntity.status(HttpStatus.CREATED).body(relayService.createRelay(userId, dto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(relayService.createRelay(userId, dto));
     }
 }

@@ -22,4 +22,6 @@ public interface RelayRepository extends JpaRepository<Relay, Long> {
            "ORDER BY r.participantCount DESC, r.createdAt DESC")
     List<Relay> findAllByFilterOrderByPopular(@Param("categoryId") Long categoryId,
                                               @Param("keyword") String keyword);
+
+    List<Relay> findTop4ByOrderByCreatedAtDesc();
 }

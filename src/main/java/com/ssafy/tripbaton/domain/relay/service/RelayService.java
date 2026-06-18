@@ -35,7 +35,7 @@ public class RelayService {
     @Transactional
     public RelayCreateResponseDto createRelay(Long userId, RelayCreateRequestDto dto) {
         if (dto.getTitle() == null || dto.getCategoryId() == null
-                || dto.getLocationName() == null
+//                || dto.getLocationName() == null
                 || dto.getLatitude() == null || dto.getLongitude() == null) {
             throw new CustomException(ErrorCode.MISSING_RELAY_FIELDS);
         }
@@ -50,11 +50,11 @@ public class RelayService {
                 .user(user)
                 .category(category)
                 .title(dto.getTitle())
-                .locationName(dto.getLocationName())
+                .locationName(dto.getAddress())
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
-                .photoUrl(dto.getPhotoUrl())
+//                .photoUrl(dto.getPhotoUrl())
                 .content(dto.getContent())
                 .participantCount(1)
                 .lastParticipatedAt(LocalDateTime.now())
@@ -66,11 +66,11 @@ public class RelayService {
                 .relay(saved)
                 .user(user)
                 .stepOrder(1)
-                .locationName(dto.getLocationName())
+                .locationName(dto.getAddress())
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
-                .photoUrl(dto.getPhotoUrl())
+//                .photoUrl(dto.getPhotoUrl())
                 .content(dto.getContent())
                 .build();
 

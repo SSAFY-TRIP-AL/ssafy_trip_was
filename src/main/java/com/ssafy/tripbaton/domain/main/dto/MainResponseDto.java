@@ -11,6 +11,7 @@ import java.util.List;
 public class MainResponseDto {
 
     private Long userCount;
+    private Long relayCount;
     private List<TopUserDto> topUsers;
     private List<RelayListItemDto> relays;
 

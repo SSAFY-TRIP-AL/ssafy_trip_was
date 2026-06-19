@@ -167,7 +167,7 @@ public class RelayService {
         Relay relay = relayRepository.findById(relayId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
 
-        if (relay.getStatus() == RelayStatus.CLOSED) {
+        if (relay.getStatus() == RelayStatus.ARCHIVED) {
             throw new CustomException(ErrorCode.RELAY_ARCHIVED);
         }
 

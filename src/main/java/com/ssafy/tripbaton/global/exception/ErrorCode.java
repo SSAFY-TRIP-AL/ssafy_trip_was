@@ -26,7 +26,8 @@ public enum ErrorCode {
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "찜한 릴레이가 존재하지 않습니다.", "BOOKMARK_NOT_FOUND"),
     MISSING_STEP_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(locationName, latitude, longitude)가 필요합니다.", "MISSING_FIELDS"),
     AI_REQUEST_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AI 요청 처리 중 오류가 발생했습니다.", "AI_REQUEST_FAILED"),
-    MISSING_LOCATION_NAME(HttpStatus.BAD_REQUEST, "locationName은 필수입니다.", "MISSING_LOCATION_NAME");
+    MISSING_LOCATION_NAME(HttpStatus.BAD_REQUEST, "locationName은 필수입니다.", "MISSING_LOCATION_NAME"),
+    MISSING_RECOMMEND_FIELDS(HttpStatus.BAD_REQUEST, "필수 필드(relayId, currentLocation)가 필요합니다.", "MISSING_FIELDS");
 
     private final HttpStatus status;
     private final String message;

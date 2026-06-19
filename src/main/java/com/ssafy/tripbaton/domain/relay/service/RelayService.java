@@ -62,7 +62,7 @@ public class RelayService {
                 .user(user)
                 .category(category)
                 .title(dto.getTitle())
-                .locationName(dto.getAddress())
+//                .locationName(dto.getAddress())
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
@@ -87,6 +87,9 @@ public class RelayService {
                 .build();
 
         relayStepRepository.save(firstStep);
+
+        // 릴레이 생성 시 참여 +1
+        user.increaseParticipationCount();
 
         return new RelayCreateResponseDto("릴레이가 등록되었습니다.", saved.getId());
     }
@@ -189,6 +192,9 @@ public class RelayService {
                 .build();
 
         RelayStep saved = relayStepRepository.save(step);
+
+        // 릴레이 참여 시 참여 +1
+        user.increaseParticipationCount();
 
         LocalDateTime now = LocalDateTime.now();
         relay.addStep(now);

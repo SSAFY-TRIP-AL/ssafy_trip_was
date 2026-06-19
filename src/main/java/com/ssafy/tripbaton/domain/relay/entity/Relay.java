@@ -61,6 +61,11 @@ public class Relay {
 
     private LocalDateTime lastParticipatedAt;
 
+    public void addStep(LocalDateTime participatedAt) {
+        this.participantCount++;
+        this.lastParticipatedAt = participatedAt;
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -1,7 +1,7 @@
 package com.ssafy.tripbaton.domain.main.controller;
 
-import com.ssafy.tripbaton.domain.main.dto.MainResponseDto;
-import com.ssafy.tripbaton.domain.main.service.MainService;
+import com.ssafy.tripbaton.domain.relay.dto.HallOfFameResponseDto;
+import com.ssafy.tripbaton.domain.relay.service.RelayService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,17 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "main")
 @RestController
-@RequestMapping("/api/main")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MainController {
 
-    private final MainService mainService;
+    private final RelayService relayService;
 
-    @GetMapping
-    public ResponseEntity<MainResponseDto> getMain(){
-        return ResponseEntity.ok(
-                mainService.getMain()
-        );
+    @GetMapping("/hall-of-fame")
+    public ResponseEntity<HallOfFameResponseDto> getHallOfFame() {
+        return ResponseEntity.ok(relayService.getHallOfFame());
     }
-
 }

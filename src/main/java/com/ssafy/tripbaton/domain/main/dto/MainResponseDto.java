@@ -1,6 +1,9 @@
 package com.ssafy.tripbaton.domain.main.dto;
 
+import com.ssafy.tripbaton.domain.relay.dto.ActiveRelayListResponseDto;
+import com.ssafy.tripbaton.domain.relay.dto.HallOfFameResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.RelayListItemDto;
+import com.ssafy.tripbaton.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +15,8 @@ public class MainResponseDto {
 
     private Long userCount;
     private Long relayCount;
-    private List<TopUserDto> topUsers;
-    private List<RelayListItemDto> relays;
+//    private HallOfFameResponseDto hallOfFame;
+    private ActiveRelayListResponseDto relays;
+    private List<User> ranking;
 
 }

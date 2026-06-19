@@ -138,7 +138,7 @@ public class RelayService {
     @Transactional(readOnly = true)
     public ActiveRelayListResponseDto getActiveRelays() {
         List<ActiveRelayListItemDto> items = relayRepository
-                .findTop5Active(org.springframework.data.domain.PageRequest.of(0, 5))
+                .findTop5Active(org.springframework.data.domain.PageRequest.of(0, 4))
                 .stream()
                 .map(ActiveRelayListItemDto::new)
                 .toList();

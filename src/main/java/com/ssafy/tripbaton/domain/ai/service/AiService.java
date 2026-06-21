@@ -33,6 +33,28 @@ public class AiService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private static final String OPENAI_URL =
+            "https://gms.ssafy.io/gmsapi/api.openai.com/v1/chat/completions";
+
+    // body생성하기
+    private Map<String, Object> createRequestBody(String prompt) {
+        return Map.of(
+                "model", model,
+                "messages", List.of(
+                        Map.of(
+                                "role", "developer",
+                                "content", "Answer in Korean"
+                        ),
+                        Map.of(
+                                "role", "user",
+                                "content", prompt
+                        )
+                ),
+                "response_format", Map.of(
+                        "type", "json_object"
+                )
+        );
+    }
 
     public AiSummaryResponseDto getSummary(String locationName, String category) {
         String prompt = buildPrompt(locationName, category);
@@ -41,17 +63,19 @@ public class AiService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
 
-        Map<String, Object> body = Map.of(
-                "model", model,
-                "messages", List.of(Map.of("role", "user", "content", prompt)),
-                "response_format", Map.of("type", "json_object")
-        );
+//        Map<String, Object> body = Map.of(
+//                "model", model,
+//                "messages", List.of(Map.of("role", "user", "content", prompt)),
+//                "response_format", Map.of("type", "json_object")
+//        );
+        Map<String, Object> body = createRequestBody(prompt);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
             String raw = restTemplate.postForObject(
-                    "https://api.openai.com/v1/chat/completions",
+//                    "https://api.openai.com/v1/chat/completions",
+                    OPENAI_URL,
                     request,
                     String.class
             );
@@ -80,17 +104,19 @@ public class AiService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
 
-        Map<String, Object> body = Map.of(
-                "model", model,
-                "messages", List.of(Map.of("role", "user", "content", prompt)),
-                "response_format", Map.of("type", "json_object")
-        );
+//        Map<String, Object> body = Map.of(
+//                "model", model,
+//                "messages", List.of(Map.of("role", "user", "content", prompt)),
+//                "response_format", Map.of("type", "json_object")
+//        );
+        Map<String, Object> body = createRequestBody(prompt);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
             String raw = restTemplate.postForObject(
-                    "https://api.openai.com/v1/chat/completions",
+//                    "https://api.openai.com/v1/chat/completions",
+                    OPENAI_URL,
                     request,
                     String.class
             );
@@ -133,7 +159,7 @@ public class AiService {
                 ? " (카테고리: " + category + ")"
                 : "";
         return "다음 여행지에 대해 한국어로 짧은 소개와 주요 포인트 3가지를 JSON 형식으로 답변해줘.\n" +
-               "여행지: " + locationName + categoryPart + "\n" +
-               "응답 형식: {\"summary\": \"...\", \"highlights\": [\"...\", \"...\", \"...\"]}";
+                "여행지: " + locationName + categoryPart + "\n" +
+                "응답 형식: {\"summary\": \"...\", \"highlights\": [\"...\", \"...\", \"...\"]}";
     }
 }

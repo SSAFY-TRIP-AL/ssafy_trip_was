@@ -3,6 +3,7 @@ package com.ssafy.tripbaton.domain.user.repository;
 import com.ssafy.tripbaton.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -10,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByLoginId(String loginId);
     boolean existsByEmail(String email);
     Optional<User> findByLoginId(String loginId);
+    List<User> findTop3ByOrderByParticipationCountDesc();
 }

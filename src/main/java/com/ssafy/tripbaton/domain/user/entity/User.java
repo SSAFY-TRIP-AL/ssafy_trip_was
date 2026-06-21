@@ -71,6 +71,11 @@ public class User {
         this.deletedAt = LocalDateTime.now();
     }
 
+    // 릴레이 참여, 시작할 때 participationCount 증가 함수
+    public void increaseParticipationCount() {
+        this.participationCount++;
+    }
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

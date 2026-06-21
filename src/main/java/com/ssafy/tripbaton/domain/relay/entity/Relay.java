@@ -32,8 +32,8 @@ public class Relay {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, length = 100)
-    private String locationName;
+//    @Column(nullable = false, length = 100)
+//    private String locationName;
 
     @Column(length = 255)
     private String address;

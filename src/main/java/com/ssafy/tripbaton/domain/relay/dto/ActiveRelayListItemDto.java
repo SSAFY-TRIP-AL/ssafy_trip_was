@@ -13,6 +13,8 @@ public class ActiveRelayListItemDto {
     private final String category;
     private final int participantCount;
     private final LocalDateTime lastParticipatedAt;
+    private final String photoUrl;
+
 
     public ActiveRelayListItemDto(Relay relay) {
         this.id = relay.getId();
@@ -20,5 +22,6 @@ public class ActiveRelayListItemDto {
         this.category = relay.getCategory().getName();
         this.participantCount = relay.getParticipantCount();
         this.lastParticipatedAt = relay.getLastParticipatedAt();
+        this.photoUrl = relay.getPhotoUrl();
     }
 }

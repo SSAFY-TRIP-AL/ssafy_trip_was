@@ -13,6 +13,6 @@ public class RelayCreateRequestDto {
     private String address;
     private Double latitude;
     private Double longitude;
-//    private String photoUrl;
+    private String photoUrl;
     private String content;
 }

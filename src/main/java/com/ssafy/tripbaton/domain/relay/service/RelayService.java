@@ -66,7 +66,7 @@ public class RelayService {
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
-//                .photoUrl(dto.getPhotoUrl())
+                .photoUrl(dto.getPhotoUrl())
                 .content(dto.getContent())
                 .participantCount(1)
                 .lastParticipatedAt(LocalDateTime.now())
@@ -82,7 +82,7 @@ public class RelayService {
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
-//                .photoUrl(dto.getPhotoUrl())
+                .photoUrl(dto.getPhotoUrl())
                 .content(dto.getContent())
                 .build();
 

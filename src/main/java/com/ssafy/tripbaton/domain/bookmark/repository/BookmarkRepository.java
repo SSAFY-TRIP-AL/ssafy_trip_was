@@ -1,7 +1,11 @@
 package com.ssafy.tripbaton.domain.bookmark.repository;
 
 import com.ssafy.tripbaton.domain.bookmark.entity.Bookmark;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
@@ -9,9 +13,12 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     java.util.Optional<Bookmark> findByUserIdAndRelayId(Long userId, Long relayId);
 
-    @org.springframework.data.jpa.repository.Query(
-        "SELECT b FROM Bookmark b JOIN FETCH b.relay r JOIN FETCH r.category " +
-        "WHERE b.user.id = :userId ORDER BY b.createdAt DESC")
-    java.util.List<Bookmark> findAllByUserIdWithRelay(
-        @org.springframework.data.repository.query.Param("userId") Long userId);
+    @Query(
+            value = "SELECT b FROM Bookmark b WHERE b.user.id = :userId ORDER BY b.createdAt DESC",
+            countQuery = "SELECT COUNT(b) FROM Bookmark b WHERE b.user.id = :userId"
+    )
+    Page<Bookmark> findByUserId(
+            @Param("userId") Long userId,
+            Pageable pageable
+    );
 }

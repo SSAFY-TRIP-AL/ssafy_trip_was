@@ -24,8 +24,8 @@ public interface RelayRepository extends JpaRepository<Relay, Long> {
     List<Relay> findAllByFilterOrderByPopular(@Param("categoryId") Long categoryId,
                                               @Param("keyword") String keyword);
 
-    @Query("SELECT r FROM Relay r JOIN FETCH r.category WHERE r.user.id = :userId ORDER BY r.createdAt DESC")
-    List<Relay> findAllByUserIdOrderByCreatedAtDesc(@Param("userId") Long userId);
+    org.springframework.data.domain.Page<com.ssafy.tripbaton.domain.relay.entity.Relay>
+    findAllByUserIdOrderByCreatedAtDesc(Long userId, org.springframework.data.domain.Pageable pageable);
 
     @Query("SELECT r FROM Relay r JOIN FETCH r.category WHERE r.status IN ('ACTIVE', 'STALE') ORDER BY r.lastParticipatedAt DESC")
     List<Relay> findTop5Active(org.springframework.data.domain.Pageable pageable);

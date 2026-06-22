@@ -11,9 +11,12 @@ import com.ssafy.tripbaton.domain.user.entity.User;
 import com.ssafy.tripbaton.domain.user.repository.UserRepository;
 
 import java.util.List;
+
 import com.ssafy.tripbaton.global.exception.CustomException;
 import com.ssafy.tripbaton.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,18 +30,20 @@ public class BookmarkService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public BookmarkListResponseDto getMyBookmarks(Long userId) {
-        List<BookmarkListItemDto> items = bookmarkRepository.findAllByUserIdWithRelay(userId)
-                .stream()
-                .map(bookmark -> {
-                    String thumbnailUrl = relayStepRepository
-                            .findTopByRelayIdOrderByStepOrderAsc(bookmark.getRelay().getId())
-                            .map(step -> step.getPhotoUrl())
-                            .orElse(null);
-                    return new BookmarkListItemDto(bookmark, thumbnailUrl);
-                })
-                .toList();
-        return new BookmarkListResponseDto(items);
+    public BookmarkListResponseDto getMyBookmarks(Long userId, Pageable pageable) {
+
+        Page<Bookmark> page = bookmarkRepository.findByUserId(userId, pageable);
+
+        Page<BookmarkListItemDto> dtoPage = page.map(bookmark -> {
+            String thumbnailUrl = relayStepRepository
+                    .findTopByRelayIdOrderByStepOrderAsc(bookmark.getRelay().getId())
+                    .map(step -> step.getPhotoUrl())
+                    .orElse(null);
+
+            return new BookmarkListItemDto(bookmark, thumbnailUrl);
+        });
+
+        return new BookmarkListResponseDto(dtoPage);
     }
 
     @Transactional

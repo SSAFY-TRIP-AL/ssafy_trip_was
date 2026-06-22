@@ -4,6 +4,7 @@ import com.ssafy.tripbaton.domain.user.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 public class UserResponseDto {
@@ -16,7 +17,7 @@ public class UserResponseDto {
     private final int createdCount;
     private final int likedCount;
     private final String provider;
-    private final LocalDateTime createdAt;
+    private final String createdAt;
 
 
     public UserResponseDto(User user) {
@@ -26,7 +27,7 @@ public class UserResponseDto {
         this.profileImage = user.getProfileImage();
         this.participationCount = user.getParticipationCount();
         this.provider = user.getProvider();
-        this.createdAt = user.getCreatedAt();
+        this.createdAt = user.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.createdCount = user.getCreatedCount();
         this.likedCount = user.getLikedCount();
     }

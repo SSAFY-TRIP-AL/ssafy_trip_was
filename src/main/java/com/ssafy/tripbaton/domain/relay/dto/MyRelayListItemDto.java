@@ -4,6 +4,7 @@ import com.ssafy.tripbaton.domain.relay.entity.Relay;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 public class MyRelayListItemDto {
@@ -13,7 +14,7 @@ public class MyRelayListItemDto {
     private final String content;
     private final String photoUrl;
     private final String status;
-    private final LocalDateTime date;
+    private final String date;
 
     public MyRelayListItemDto(Relay relay) {
         this.id = relay.getId();
@@ -21,6 +22,6 @@ public class MyRelayListItemDto {
         this.content = relay.getContent();
         this.photoUrl = relay.getPhotoUrl();
         this.status = relay.getStatus().name();
-        this.date = relay.getLastParticipatedAt();
+        this.date = relay.getLastParticipatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

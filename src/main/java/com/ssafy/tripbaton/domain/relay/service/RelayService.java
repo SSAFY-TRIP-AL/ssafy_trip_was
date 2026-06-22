@@ -47,7 +47,7 @@ public class RelayService {
     @Transactional
     public RelayCreateResponseDto createRelay(Long userId, RelayCreateRequestDto dto) {
         if (dto.getTitle() == null || dto.getCategoryId() == null
-//                || dto.getLocationName() == null
+                || dto.getLocationName() == null
                 || dto.getLatitude() == null || dto.getLongitude() == null) {
             throw new CustomException(ErrorCode.MISSING_RELAY_FIELDS);
         }
@@ -62,7 +62,7 @@ public class RelayService {
                 .user(user)
                 .category(category)
                 .title(dto.getTitle())
-//                .locationName(dto.getAddress())
+                .locationName(dto.getAddress())
                 .address(dto.getAddress())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
@@ -90,6 +90,9 @@ public class RelayService {
 
         // 릴레이 생성 시 참여 +1
         user.increaseParticipationCount();
+
+        LocalDateTime now = LocalDateTime.now();
+        relay.addStep(now);
 
         return new RelayCreateResponseDto("릴레이가 등록되었습니다.", saved.getId());
     }
@@ -163,7 +166,9 @@ public class RelayService {
 
     @Transactional
     public RelayStepCreateResponseDto joinRelay(Long userId, Long relayId, RelayStepCreateRequestDto dto) {
-        if (dto.getLocationName() == null || dto.getLatitude() == null || dto.getLongitude() == null) {
+        if (
+                dto.getLocationName() == null ||
+                        dto.getLatitude() == null || dto.getLongitude() == null) {
             throw new CustomException(ErrorCode.MISSING_STEP_FIELDS);
         }
 
@@ -173,6 +178,12 @@ public class RelayService {
         if (relay.getStatus() == RelayStatus.ARCHIVED) {
             throw new CustomException(ErrorCode.RELAY_ARCHIVED);
         }
+        if (relay.getStatus() == RelayStatus.USING) {
+            throw new CustomException(ErrorCode.RELAY_USING);
+        }
+
+        // 참여 중 상태로 변경
+        relay.changeStatus(RelayStatus.USING);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
@@ -195,6 +206,9 @@ public class RelayService {
 
         // 릴레이 참여 시 참여 +1
         user.increaseParticipationCount();
+
+        // 활성화 상태로 변경
+        relay.changeStatus(RelayStatus.ACTIVE);
 
         LocalDateTime now = LocalDateTime.now();
         relay.addStep(now);

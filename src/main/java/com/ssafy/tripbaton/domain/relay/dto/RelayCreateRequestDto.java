@@ -9,7 +9,7 @@ public class RelayCreateRequestDto {
 
     private String title;
     private Long categoryId;
-//    private String locationName;
+    private String locationName;
     private String address;
     private Double latitude;
     private Double longitude;

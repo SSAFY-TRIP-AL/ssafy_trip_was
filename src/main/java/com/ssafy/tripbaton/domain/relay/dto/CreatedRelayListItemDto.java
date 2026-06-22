@@ -14,6 +14,8 @@ public class CreatedRelayListItemDto {
     private final int participantCount;
     private final String status;
     private final LocalDateTime createdAt;
+    private final String photoUrl;
+    private final String content;
 
     public CreatedRelayListItemDto(Relay relay) {
         this.id = relay.getId();
@@ -22,5 +24,7 @@ public class CreatedRelayListItemDto {
         this.participantCount = relay.getParticipantCount();
         this.status = relay.getStatus().name();
         this.createdAt = relay.getCreatedAt();
+        this.photoUrl = relay.getPhotoUrl();
+        this.content = relay.getContent();
     }
 }

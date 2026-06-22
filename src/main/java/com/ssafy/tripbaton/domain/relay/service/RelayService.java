@@ -94,8 +94,8 @@ public class RelayService {
         // 릴레이 생성 개수 +1
         user.increaseCreatedCount();
 
-        LocalDateTime now = LocalDateTime.now();
-        relay.addStep(now);
+//        LocalDateTime now = LocalDateTime.now();
+//        relay.addStep(now);
 
         return new RelayCreateResponseDto("릴레이가 등록되었습니다.", saved.getId());
     }

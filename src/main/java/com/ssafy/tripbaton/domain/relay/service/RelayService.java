@@ -91,6 +91,9 @@ public class RelayService {
         // 릴레이 생성 시 참여 +1
         user.increaseParticipationCount();
 
+        // 릴레이 생성 개수 +1
+        user.increaseCreatedCount();
+
         LocalDateTime now = LocalDateTime.now();
         relay.addStep(now);
 

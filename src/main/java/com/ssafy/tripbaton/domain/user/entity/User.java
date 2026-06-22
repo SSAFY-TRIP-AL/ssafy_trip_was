@@ -41,6 +41,14 @@ public class User {
     @Column(nullable = false)
     private int participationCount = 0;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private int createdCount = 0;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private int likedCount = 0;
+
     @Column(length = 20)
     private String provider;
 
@@ -74,6 +82,21 @@ public class User {
     // 릴레이 참여, 시작할 때 participationCount 증가 함수
     public void increaseParticipationCount() {
         this.participationCount++;
+    }
+
+    // 릴레이 생성 시 증가 함수
+    public void increaseCreatedCount() {
+        this.createdCount++;
+    }
+
+    // 좋아요 누를 때 좋아요 수 증가 함수
+    public void increaseLikedCount() {
+        this.likedCount++;
+    }
+
+    // 좋아요 취소할 때 좋아요 수 감소 함수
+    public void decreaseLikedCount() {
+        this.likedCount--;
     }
 
     @CreationTimestamp

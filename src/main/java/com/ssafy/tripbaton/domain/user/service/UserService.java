@@ -69,9 +69,17 @@ public class UserService {
         User user = userRepository.findByLoginId(dto.getLoginId())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
 
+        // 탈퇴한 사용자면 로그인 차단
+        if(user.isDeleted()){
+            throw new CustomException(ErrorCode.DELETED_USER);
+        }
+
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
+
+
+
 
         String accessToken = jwtUtil.generateAccessToken(user.getId());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());

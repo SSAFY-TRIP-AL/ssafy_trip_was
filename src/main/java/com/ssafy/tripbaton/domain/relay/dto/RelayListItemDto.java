@@ -19,6 +19,8 @@ public class RelayListItemDto {
     private final LocalDateTime createdAt;
     private final boolean isBookmarked;
     private final String photoUrl;
+    private final Double latitude;
+    private final Double longitude;
 
     public RelayListItemDto(Relay relay, boolean isBookmarked) {
         this.id = relay.getId();
@@ -30,5 +32,7 @@ public class RelayListItemDto {
         this.createdAt = relay.getCreatedAt();
         this.isBookmarked = isBookmarked;
         this.photoUrl = relay.getPhotoUrl();
+        this.latitude = relay.getLatitude();
+        this.longitude=relay.getLongitude();
     }
 }

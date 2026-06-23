@@ -51,6 +51,10 @@ public class Relay {
     private String content;
 
     @Builder.Default
+    @Column(nullable = false)
+    private Boolean isBookmarked = false;
+
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private RelayStatus status = RelayStatus.ACTIVE;
@@ -64,6 +68,10 @@ public class Relay {
     public void addStep(LocalDateTime participatedAt) {
         this.participantCount++;
         this.lastParticipatedAt = participatedAt;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.isBookmarked = bookmarked;
     }
 
     public void changeStatus(RelayStatus status) {

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     boolean existsByUserIdAndRelayId(Long userId, Long relayId);
@@ -20,5 +22,16 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Page<Bookmark> findByUserId(
             @Param("userId") Long userId,
             Pageable pageable
+    );
+
+    @Query("""
+            select b.relay.id
+            from Bookmark b
+            where b.user.id = :userId
+            and b.relay.id in :relayIds
+            """)
+    List<Long> findBookmarkedRelayIds(
+            Long userId,
+            List<Long> relayIds
     );
 }

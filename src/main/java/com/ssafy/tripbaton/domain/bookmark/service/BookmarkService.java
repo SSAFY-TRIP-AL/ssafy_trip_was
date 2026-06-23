@@ -58,8 +58,7 @@ public class BookmarkService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
 
-        // Relay 엔티티에 true 설정
-        relay.setBookmarked(true);
+
         bookmarkRepository.save(Bookmark.builder()
                 .user(user)
                 .relay(relay)
@@ -74,8 +73,6 @@ public class BookmarkService {
         Bookmark bookmark = bookmarkRepository.findByUserIdAndRelayId(userId, relayId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
 
-        // Relay 엔티티에 false 설정
-        relay.setBookmarked(false);
         bookmarkRepository.delete(bookmark);
     }
 }

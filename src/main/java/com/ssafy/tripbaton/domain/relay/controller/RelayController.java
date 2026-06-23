@@ -11,6 +11,8 @@ import com.ssafy.tripbaton.domain.relay.dto.RelayStepCreateResponseDto;
 import com.ssafy.tripbaton.domain.relay.service.RelayService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,21 +33,26 @@ public class RelayController {
 
     @GetMapping
     public ResponseEntity<RelayListResponseDto> getRelays(
+            Authentication authentication,
             @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false, defaultValue = "latest") String sort,
-            @RequestParam(required = false) String keyword) {
-        return ResponseEntity.ok(relayService.getRelays(categoryId, sort, keyword));
+            @RequestParam(required = false, defaultValue = "latest") String orderBy,
+            @RequestParam(required = false) String keyword,
+            Pageable pageable
+    ) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ResponseEntity.ok(relayService.getRelays(userId, categoryId, orderBy, keyword, pageable));
     }
 
     @GetMapping("/{relayId}")
-    public ResponseEntity<RelayDetailResponseDto> getRelay(@PathVariable Long relayId) {
-        return ResponseEntity.ok(relayService.getRelay(relayId));
+    public ResponseEntity<RelayDetailResponseDto> getRelay(Authentication authentication, @PathVariable Long relayId) {
+        Long userId = (Long) authentication.getPrincipal();
+        return ResponseEntity.ok(relayService.getRelay(userId,relayId));
     }
 
-    @GetMapping("/{relayId}/steps")
-    public ResponseEntity<RelayRouteResponseDto> getRelayRoute(@PathVariable Long relayId) {
-        return ResponseEntity.ok(relayService.getRelayRoute(relayId));
-    }
+//    @GetMapping("/{relayId}/steps")
+//    public ResponseEntity<RelayRouteResponseDto> getRelayRoute(@PathVariable Long relayId) {
+//        return ResponseEntity.ok(relayService.getRelayRoute(relayId));
+//    }
 
     @PostMapping("/{relayId}/steps")
     public ResponseEntity<RelayStepCreateResponseDto> joinRelay(Authentication authentication,

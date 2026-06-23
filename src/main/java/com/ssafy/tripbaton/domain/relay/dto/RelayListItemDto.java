@@ -1,5 +1,6 @@
 package com.ssafy.tripbaton.domain.relay.dto;
 
+import com.ssafy.tripbaton.domain.bookmark.repository.BookmarkRepository;
 import com.ssafy.tripbaton.domain.relay.entity.Relay;
 import lombok.Getter;
 
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class RelayListItemDto {
+
 
     private final Long id;
     private final String title;
@@ -16,8 +18,9 @@ public class RelayListItemDto {
     private final LocalDateTime lastParticipatedAt;
     private final LocalDateTime createdAt;
     private final boolean isBookmarked;
+    private final String photoUrl;
 
-    public RelayListItemDto(Relay relay) {
+    public RelayListItemDto(Relay relay, boolean isBookmarked) {
         this.id = relay.getId();
         this.title = relay.getTitle();
         this.category = relay.getCategory().getName();
@@ -25,6 +28,7 @@ public class RelayListItemDto {
         this.status = relay.getStatus().name();
         this.lastParticipatedAt = relay.getLastParticipatedAt();
         this.createdAt = relay.getCreatedAt();
-        this.isBookmarked = relay.getIsBookmarked();
+        this.isBookmarked = isBookmarked;
+        this.photoUrl = relay.getPhotoUrl();
     }
 }

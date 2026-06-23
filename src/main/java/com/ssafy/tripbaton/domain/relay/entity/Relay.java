@@ -50,9 +50,9 @@ public class Relay {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean isBookmarked = false;
+//    @Builder.Default
+//    @Column(nullable = false)
+//    private Boolean isBookmarked = false;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -70,9 +70,9 @@ public class Relay {
         this.lastParticipatedAt = participatedAt;
     }
 
-    public void setBookmarked(boolean bookmarked) {
-        this.isBookmarked = bookmarked;
-    }
+//    public void setBookmarked(boolean bookmarked) {
+//        this.isBookmarked = bookmarked;
+//    }
 
     public void changeStatus(RelayStatus status) {
         this.status = status;

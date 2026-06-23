@@ -1,5 +1,6 @@
 package com.ssafy.tripbaton.domain.relay.service;
 
+import com.ssafy.tripbaton.domain.bookmark.repository.BookmarkRepository;
 import com.ssafy.tripbaton.domain.category.entity.Category;
 import com.ssafy.tripbaton.domain.category.repository.CategoryRepository;
 import com.ssafy.tripbaton.domain.relay.dto.RelayCreateRequestDto;
@@ -27,13 +28,17 @@ import com.ssafy.tripbaton.domain.user.repository.UserRepository;
 import com.ssafy.tripbaton.global.exception.CustomException;
 import com.ssafy.tripbaton.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +48,8 @@ public class RelayService {
     private final RelayStepRepository relayStepRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final BookmarkRepository bookmarkRepository;
+
 
     @Transactional
     public RelayCreateResponseDto createRelay(Long userId, RelayCreateRequestDto dto) {
@@ -101,20 +108,43 @@ public class RelayService {
     }
 
     @Transactional(readOnly = true)
-    public RelayListResponseDto getRelays(Long categoryId, String sort, String keyword) {
-        List<Relay> relays = "popular".equals(sort)
-                ? relayRepository.findAllByFilterOrderByPopular(categoryId, keyword)
-                : relayRepository.findAllByFilterOrderByLatest(categoryId, keyword);
+    public RelayListResponseDto getRelays(
+            Long userId,
+            Long categoryId,
+            String orderBy,
+            String keyword,
+            Pageable pageable
+    ) {
 
-        List<RelayListItemDto> items = relays.stream()
-                .map(RelayListItemDto::new)
+        Page<Relay> relays =
+                "popular".equals(orderBy)
+                        ? relayRepository.findAllByFilterOrderByPopular(categoryId, keyword, pageable)
+                        : relayRepository.findAllByFilterOrderByLatest(categoryId, keyword, pageable);
+
+
+        List<Long> relayIds = relays.getContent().stream()
+                .map(Relay::getId)
                 .toList();
 
-        return new RelayListResponseDto(items);
+
+        Set<Long> bookmarkedIds = new HashSet<>(
+                bookmarkRepository.findBookmarkedRelayIds(userId, relayIds)
+        );
+
+
+        Page<RelayListItemDto> page = relays.map(relay ->
+                new RelayListItemDto(
+                        relay,
+                        bookmarkedIds.contains(relay.getId())
+                )
+        );
+
+
+        return new RelayListResponseDto(page);
     }
 
     @Transactional(readOnly = true)
-    public RelayDetailResponseDto getRelay(Long relayId) {
+    public RelayDetailResponseDto getRelay(Long userId, Long relayId) {
         Relay relay = relayRepository.findById(relayId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
 
@@ -122,8 +152,10 @@ public class RelayService {
                 .stream()
                 .map(RelayStepDto::new)
                 .toList();
+        boolean bookmarked =
+                bookmarkRepository.existsByUserIdAndRelayId(userId, relayId);
 
-        return new RelayDetailResponseDto(relay, steps);
+        return new RelayDetailResponseDto(relay, steps, bookmarked);
     }
 
     @Transactional(readOnly = true)

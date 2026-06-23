@@ -20,6 +20,7 @@ import com.ssafy.tripbaton.global.exception.CustomException;
 import com.ssafy.tripbaton.global.exception.ErrorCode;
 import com.ssafy.tripbaton.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -161,7 +162,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public MyRelayListResponseDto getMyRelays(Long userId, Pageable pageable) {
 
-        org.springframework.data.domain.Page<MyRelayListItemDto> page =
+        Page<MyRelayListItemDto> page =
                 relayStepRepository.findDistinctRelaysByUserId(userId, pageable)
                         .map(MyRelayListItemDto::new);
 
@@ -171,7 +172,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public CreatedRelayListResponseDto getMyCreatedRelays(Long userId, Pageable pageable) {
 
-        org.springframework.data.domain.Page<CreatedRelayListItemDto> page =
+        Page<CreatedRelayListItemDto> page =
                 relayRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable)
                         .map(CreatedRelayListItemDto::new);
 

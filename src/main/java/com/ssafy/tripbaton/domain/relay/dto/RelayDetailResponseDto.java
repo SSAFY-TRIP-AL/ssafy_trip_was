@@ -17,6 +17,7 @@ public class RelayDetailResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime lastParticipatedAt;
     private final List<RelayStepDto> steps;
+    private final boolean isBookmarked;
 
     public RelayDetailResponseDto(Relay relay, List<RelayStepDto> steps) {
         this.id = relay.getId();
@@ -27,5 +28,6 @@ public class RelayDetailResponseDto {
         this.createdAt = relay.getCreatedAt();
         this.lastParticipatedAt = relay.getLastParticipatedAt();
         this.steps = steps;
+        this.isBookmarked = relay.getIsBookmarked();
     }
 }

@@ -11,6 +11,7 @@ import com.ssafy.tripbaton.domain.user.service.UserService;
 import com.ssafy.tripbaton.global.common.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -47,21 +48,21 @@ public class UserController {
     }
 
     @GetMapping("/me/bookmarks")
-    public ResponseEntity<BookmarkListResponseDto> getMyBookmarks(Authentication authentication) {
+    public ResponseEntity<BookmarkListResponseDto> getMyBookmarks(Authentication authentication, Pageable pageable) {
         Long userId = (Long) authentication.getPrincipal();
-        return ResponseEntity.ok(bookmarkService.getMyBookmarks(userId));
+        return ResponseEntity.ok(bookmarkService.getMyBookmarks(userId, pageable));
     }
 
     @GetMapping("/me/relays/created")
-    public ResponseEntity<CreatedRelayListResponseDto> getMyCreatedRelays(Authentication authentication) {
+    public ResponseEntity<CreatedRelayListResponseDto> getMyCreatedRelays(Authentication authentication, Pageable pageable) {
         Long userId = (Long) authentication.getPrincipal();
-        return ResponseEntity.ok(userService.getMyCreatedRelays(userId));
+        return ResponseEntity.ok(userService.getMyCreatedRelays(userId, pageable));
     }
 
     @GetMapping("/me/relays")
-    public ResponseEntity<MyRelayListResponseDto> getMyRelays(Authentication authentication) {
+    public ResponseEntity<MyRelayListResponseDto> getMyRelays(Authentication authentication, Pageable pageable) {
         Long userId = (Long) authentication.getPrincipal();
-        return ResponseEntity.ok(userService.getMyRelays(userId));
+        return ResponseEntity.ok(userService.getMyRelays(userId, pageable));
     }
 
     @DeleteMapping("/me")

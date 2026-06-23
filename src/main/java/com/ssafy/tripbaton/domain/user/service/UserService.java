@@ -20,6 +20,7 @@ import com.ssafy.tripbaton.global.exception.CustomException;
 import com.ssafy.tripbaton.global.exception.ErrorCode;
 import com.ssafy.tripbaton.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,9 +69,17 @@ public class UserService {
         User user = userRepository.findByLoginId(dto.getLoginId())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
 
+        // 탈퇴한 사용자면 로그인 차단
+        if(user.isDeleted()){
+            throw new CustomException(ErrorCode.DELETED_USER);
+        }
+
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
+
+
+
 
         String accessToken = jwtUtil.generateAccessToken(user.getId());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
@@ -150,21 +159,23 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public MyRelayListResponseDto getMyRelays(Long userId) {
-        List<MyRelayListItemDto> items = relayStepRepository.findDistinctRelaysByUserId(userId)
-                .stream()
-                .map(MyRelayListItemDto::new)
-                .toList();
-        return new MyRelayListResponseDto(items);
+    public MyRelayListResponseDto getMyRelays(Long userId, Pageable pageable) {
+
+        org.springframework.data.domain.Page<MyRelayListItemDto> page =
+                relayStepRepository.findDistinctRelaysByUserId(userId, pageable)
+                        .map(MyRelayListItemDto::new);
+
+        return new MyRelayListResponseDto(page);
     }
 
     @Transactional(readOnly = true)
-    public CreatedRelayListResponseDto getMyCreatedRelays(Long userId) {
-        List<CreatedRelayListItemDto> items = relayRepository.findAllByUserIdOrderByCreatedAtDesc(userId)
-                .stream()
-                .map(CreatedRelayListItemDto::new)
-                .toList();
-        return new CreatedRelayListResponseDto(items);
+    public CreatedRelayListResponseDto getMyCreatedRelays(Long userId, Pageable pageable) {
+
+        org.springframework.data.domain.Page<CreatedRelayListItemDto> page =
+                relayRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable)
+                        .map(CreatedRelayListItemDto::new);
+
+        return new CreatedRelayListResponseDto(page);
     }
 
     @Transactional

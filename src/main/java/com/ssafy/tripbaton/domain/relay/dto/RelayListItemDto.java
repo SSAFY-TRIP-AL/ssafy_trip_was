@@ -15,6 +15,7 @@ public class RelayListItemDto {
     private final String status;
     private final LocalDateTime lastParticipatedAt;
     private final LocalDateTime createdAt;
+    private final boolean isBookmarked;
 
     public RelayListItemDto(Relay relay) {
         this.id = relay.getId();
@@ -24,5 +25,6 @@ public class RelayListItemDto {
         this.status = relay.getStatus().name();
         this.lastParticipatedAt = relay.getLastParticipatedAt();
         this.createdAt = relay.getCreatedAt();
+        this.isBookmarked = relay.getIsBookmarked();
     }
 }

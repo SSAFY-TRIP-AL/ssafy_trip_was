@@ -8,12 +8,14 @@ import java.time.LocalDateTime;
 @Getter
 public class RelayRouteStepDto {
 
+    private final String userName;
     private final int stepOrder;
     private final String locationName;
     private final String address;
     private final Double latitude;
     private final Double longitude;
     private final LocalDateTime createdAt;
+
 
     public RelayRouteStepDto(RelayStep step) {
         this.stepOrder = step.getStepOrder();
@@ -22,5 +24,6 @@ public class RelayRouteStepDto {
         this.latitude = step.getLatitude();
         this.longitude = step.getLongitude();
         this.createdAt = step.getCreatedAt();
+        this.userName = step.getUser().getName();
     }
 }

@@ -49,10 +49,10 @@ public class RelayController {
         return ResponseEntity.ok(relayService.getRelay(userId,relayId));
     }
 
-    @GetMapping("/{relayId}/steps")
-    public ResponseEntity<RelayRouteResponseDto> getRelayRoute(@PathVariable Long relayId) {
-        return ResponseEntity.ok(relayService.getRelayRoute(relayId));
-    }
+//    @GetMapping("/{relayId}/steps")
+//    public ResponseEntity<RelayRouteResponseDto> getRelayRoute(@PathVariable Long relayId) {
+//        return ResponseEntity.ok(relayService.getRelayRoute(relayId));
+//    }
 
     @PostMapping("/{relayId}/steps")
     public ResponseEntity<RelayStepCreateResponseDto> joinRelay(Authentication authentication,

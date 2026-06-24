@@ -1,7 +1,9 @@
 package com.ssafy.tripbaton.domain.user.service;
 
+import com.ssafy.tripbaton.domain.auth.dto.OAuthUserProfile;
 import com.ssafy.tripbaton.domain.auth.entity.RefreshToken;
 import com.ssafy.tripbaton.domain.auth.repository.RefreshTokenRepository;
+import com.ssafy.tripbaton.domain.auth.service.OAuthService;
 import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListItemDto;
 import com.ssafy.tripbaton.domain.relay.dto.CreatedRelayListResponseDto;
 import com.ssafy.tripbaton.domain.relay.dto.MyRelayListItemDto;
@@ -64,6 +66,7 @@ public class UserService {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final OAuthService oAuthService;
 
     @Transactional
     public LoginResponseDto login(LoginRequestDto dto) {
@@ -86,6 +89,36 @@ public class UserService {
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
         // 기존 refresh token 삭제 후 새로 저장
+        refreshTokenRepository.deleteByUserId(user.getId());
+        refreshTokenRepository.save(RefreshToken.builder()
+                .userId(user.getId())
+                .token(refreshToken)
+                .expiresAt(LocalDateTime.now().plusSeconds(jwtUtil.getRefreshExpiration() / 1000))
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        return new LoginResponseDto(accessToken, user.getName(), user.getProfileImage(), "로그인이 완료되었습니다.");
+    }
+
+    @Transactional
+    public LoginResponseDto oauthLogin(String provider, String code, String redirectUri) {
+        OAuthUserProfile profile = oAuthService.getUserProfile(provider, code, redirectUri);
+
+        User user = userRepository.findByProviderAndProviderId(provider, profile.getProviderId())
+                .orElseGet(() -> userRepository.save(
+                        User.createOAuthUser(provider, profile.getProviderId(),
+                                profile.getName(), profile.getEmail(), profile.getProfileImage())));
+
+        if (user.isDeleted()) {
+            throw new CustomException(ErrorCode.DELETED_USER);
+        }
+
+        // 매 로그인마다 소셜 프로필(닉네임/이미지) 최신화 (null 값은 기존 유지)
+        user.update(profile.getName(), profile.getProfileImage());
+
+        String accessToken = jwtUtil.generateAccessToken(user.getId());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId());
+
         refreshTokenRepository.deleteByUserId(user.getId());
         refreshTokenRepository.save(RefreshToken.builder()
                 .userId(user.getId())

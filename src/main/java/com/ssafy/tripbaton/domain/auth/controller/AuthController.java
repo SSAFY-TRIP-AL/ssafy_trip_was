@@ -1,5 +1,6 @@
 package com.ssafy.tripbaton.domain.auth.controller;
 
+import com.ssafy.tripbaton.domain.auth.dto.OAuthRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginRequestDto;
 import com.ssafy.tripbaton.domain.user.dto.LoginResponseDto;
 import com.ssafy.tripbaton.domain.user.dto.SignupRequestDto;
@@ -31,6 +32,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(userService.login(dto));
+    }
+
+    @PostMapping("/kakao")
+    public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestBody OAuthRequestDto dto) {
+        return ResponseEntity.ok(userService.oauthLogin("kakao", dto.getCode(), dto.getRedirectUri()));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<LoginResponseDto> googleLogin(@RequestBody OAuthRequestDto dto) {
+        return ResponseEntity.ok(userService.oauthLogin("google", dto.getCode(), dto.getRedirectUri()));
     }
 
     @PostMapping("/reissue")

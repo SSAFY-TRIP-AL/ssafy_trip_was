@@ -16,6 +16,7 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 올바르지 않습니다.", "INVALID_CREDENTIALS"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다.", "INVALID_REFRESH_TOKEN"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", "INVALID_TOKEN"),
+    OAUTH_FAILED(HttpStatus.UNAUTHORIZED, "소셜 로그인에 실패했습니다.", "OAUTH_FAILED"),
     SOCIAL_LOGIN_USER(HttpStatus.FORBIDDEN, "소셜 로그인 사용자는 비밀번호를 변경할 수 없습니다.", "SOCIAL_LOGIN_USER"),
     DELETED_USER(HttpStatus.FORBIDDEN, "이미 탈퇴한 사용자입니다.", "DELETED_USER"),
     INVALID_CURRENT_PASSWORD(HttpStatus.CONFLICT, "현재 비밀번호가 올바르지 않습니다.", "INVALID_CURRENT_PASSWORD"),

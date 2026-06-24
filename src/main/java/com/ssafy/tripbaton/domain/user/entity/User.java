@@ -61,6 +61,17 @@ public class User {
 
     private LocalDateTime deletedAt;
 
+    public static User createOAuthUser(String provider, String providerId,
+                                       String name, String email, String profileImage) {
+        return User.builder()
+                .provider(provider)
+                .providerId(providerId)
+                .name(name != null ? name : "소셜사용자")
+                .email(email != null ? email : provider + "_" + providerId + "@social.local")
+                .profileImage(profileImage)
+                .build();
+    }
+
     public void update(String name, String profileImage) {
         if (name != null) this.name = name;
         if (profileImage != null) this.profileImage = profileImage;

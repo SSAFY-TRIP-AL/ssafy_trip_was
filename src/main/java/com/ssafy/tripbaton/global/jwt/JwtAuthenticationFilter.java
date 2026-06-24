@@ -1,5 +1,7 @@
 package com.ssafy.tripbaton.global.jwt;
 
+import com.ssafy.tripbaton.global.exception.CustomException;
+import com.ssafy.tripbaton.global.exception.ErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+//            else{
+//                throw new CustomException(ErrorCode.INVALID_TOKEN);
+//            }
         }
 
         filterChain.doFilter(request, response);

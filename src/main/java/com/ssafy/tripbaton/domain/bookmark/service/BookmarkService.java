@@ -58,7 +58,7 @@ public class BookmarkService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
 
-
+        user.increaseLikedCount();
         bookmarkRepository.save(Bookmark.builder()
                 .user(user)
                 .relay(relay)
@@ -69,6 +69,11 @@ public class BookmarkService {
     public void removeBookmark(Long userId, Long relayId) {
         Relay relay = relayRepository.findById(relayId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RELAY_NOT_FOUND));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_TOKEN));
+
+        user.decreaseLikedCount();
 
         Bookmark bookmark = bookmarkRepository.findByUserIdAndRelayId(userId, relayId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));

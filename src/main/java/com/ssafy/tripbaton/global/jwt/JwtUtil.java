@@ -1,8 +1,10 @@
 package com.ssafy.tripbaton.global.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -59,11 +61,25 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+
             return true;
+
+        } catch (ExpiredJwtException e) {
+            System.out.println("토큰 만료");
+
+        } catch (SignatureException e) {
+            System.out.println("서명 오류");
+
         } catch (Exception e) {
-            return false;
+            System.out.println("기타 JWT 오류");
+            e.printStackTrace();
         }
+
+        return false;
     }
 
     public long getRefreshExpiration() {

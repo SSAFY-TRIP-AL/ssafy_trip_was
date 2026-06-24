@@ -10,11 +10,13 @@ public class RelayRouteResponseDto {
 
     private final Long relayId;
     private final String title;
+    private final String locationName;
     private final List<RelayRouteStepDto> steps;
 
     public RelayRouteResponseDto(Relay relay, List<RelayRouteStepDto> steps) {
         this.relayId = relay.getId();
         this.title = relay.getTitle();
+        this.locationName=relay.getLocationName();
         this.steps = steps;
     }
 }
